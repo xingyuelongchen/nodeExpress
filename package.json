@@ -1,9 +1,13 @@
 {
-    "name": "web-test-app",
+    "name": "node-express",
     "version": "0.1.0",
     "private": true,
     "scripts": {
         "serve": "node app",
         "db": "mongod --dbpath=database/db --logpath=database/log"
+    },
+    "dependencies": {
+        "body-parser": "^1.19.0",
+        "express": "^4.17.1"
     }
 }
