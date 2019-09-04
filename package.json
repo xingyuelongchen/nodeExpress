@@ -1,0 +1,9 @@
+{
+    "name": "web-test-app",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "serve": "node app",
+        "db": "mongod --dbpath=database/db"
+    }
+}
