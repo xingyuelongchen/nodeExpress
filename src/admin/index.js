@@ -1,4 +1,8 @@
 module.exports = function (req, res, config) {
-
-res.send('asdsfdfsdfaf')
+    config.db((err, d) => {
+        d.collection('test').find({}).toArray((err, doc) => {
+            console.log(doc)
+        })
+    })
+    res.send('asdsfdfsdfaf')
 }

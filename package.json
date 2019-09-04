@@ -4,6 +4,6 @@
     "private": true,
     "scripts": {
         "serve": "node app",
-        "db": "mongod --dbpath=database/db"
+        "db": "mongod --dbpath=database/db --logpath=database/log"
     }
 }
