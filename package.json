@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "serve": "node app",
-        "db": "mongod --dbpath=database/db --logpath=database/log"
+        "db": "mongod --dbpath=database/db --logpath=database/log/mongodb.log"
     },
     "dependencies": {
         "body-parser": "^1.19.0",
