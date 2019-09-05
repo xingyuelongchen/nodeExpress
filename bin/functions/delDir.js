@@ -2,7 +2,7 @@
 const fs = require('fs');
 
 //路径类型查询，判断路径是文件，或者是目录
-function delDir(path) {
+function delDir(path = '') {
     fs.stat(path, function (err, status) {
         // 当前路径如果是文件则直接删除
         if (status && status.isFile()) {
@@ -50,7 +50,4 @@ function unlink(path) {
         }
     });
 }
-
-module.exports = function (path='') {
-    delDir(path)
-}
+module.exports = delDir

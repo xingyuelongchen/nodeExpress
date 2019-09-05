@@ -2,7 +2,8 @@ const md5 = require('md5');
 const FS = require('fs');
 const multiparty = require('multiparty');
 const PATH = require('path');
-const delDir = require('./delDir')
+const delDir = require('./delDir');
+const mkDir = require('./mkDir')
 module.exports = a;
 
 /**
@@ -19,17 +20,11 @@ function a(option, fn) {
     if (req.method.toLowerCase() == 'post') {
         //目录不存在则创建
         if (!FS.existsSync(cachePath)) {
-            FS.mkdirSync(cachePath)
+            mkDir(cachePath)
         }
-
-        let a = '';
-        savePath.split('\\').forEach(e => {
-            a += e;
-            if (!FS.existsSync(a)) {
-                FS.mkdirSync(savePath)
-            }
-            a += '\\';
-        })
+        if (!FS.existsSync(savePath)) {
+            mkDir(savePath)
+        }
         // 初始化文件接收对象
         var form = new multiparty.Form({
             // 指定缓存目录
@@ -55,8 +50,8 @@ function a(option, fn) {
                 }
                 // 移动成功 将文件路径添加到数组
                 saveFilePath.push('assets' + path + '/' + filename);
-                
-                
+
+
 
             });
             fn(null, saveFilePath, fields)

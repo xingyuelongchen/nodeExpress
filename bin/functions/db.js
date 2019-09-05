@@ -63,7 +63,7 @@ function find(option, fn) {
             });
         });
     } else {
-        console.log('请传入必要的参数');
+        fn('请传入必要的参数');
 
     }
 }
@@ -88,6 +88,8 @@ function update(option, fn) {
                 fn(err, result.result)
             })
         })
+    } else {
+        fn('请传入必须的参数')
     }
     return true;
 }

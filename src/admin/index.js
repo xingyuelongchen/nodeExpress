@@ -4,5 +4,5 @@ module.exports = function (req, res, config) {
             console.log(doc)
         })
     })
-    res.send('asdsfdfsdfaf')
+    res.send('admin')
 }

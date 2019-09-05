@@ -1,9 +1,10 @@
 const config = require('../config');
 const db = require('../database');
+const api = require('../functions');
 const router = require('express').Router();
 const url = require('url');
 const fs = require('fs');
-
+config.api = api();
 config.db = db;
 // 请求头操作
 router.use((req, res, next) => {
