@@ -3,7 +3,6 @@ const database = require("../database");
 // insert('user',array)
 /**
  * 
- * 
  * @param {String} table  数据表名
  * @param {Object} data  需要插入的数据对象
  * @param {Function} callback 回调函数
@@ -96,7 +95,12 @@ function update(option, fn) {
 }
 /**
 * 
- * @param {Object} option 
+ * @param {Object} option -包含
+ *  {
+ *  table - 表名 String
+ *  find  - 更新条件 Object
+ *  value - 新数据 Object
+ * }
  * @param {Function} fn -回调函数
  */
 
