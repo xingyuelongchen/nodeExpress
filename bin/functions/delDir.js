@@ -1,4 +1,3 @@
-
 const fs = require('fs');
 
 //路径类型查询，判断路径是文件，或者是目录
@@ -50,4 +49,8 @@ function unlink(path) {
         }
     });
 }
+<<<<<<< HEAD:bin/functions/delDir.js
+=======
+
+>>>>>>> f0328c99c3ebac39915e2781c5603d6f5c32cdd6:bin/functions/delDir.js
 module.exports = delDir

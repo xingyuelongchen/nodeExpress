@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "serve": "node app",
+        "dev": "node app",
         "db": "mongod --dbpath=database/db --logpath=database/log/mongodb.log"
     },
     "dependencies": {
