@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const router = require('./lib/router');
-const config = require('./lib/config');
+const router = require('./bin/router');
+const config = require('./bin/config');
 app.listen(config.server.port, config.server.domain, () => {
     console.log('server ', config.server.domain, config.server.port)
 });
