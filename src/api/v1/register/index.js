@@ -1,4 +1,8 @@
 const md5 = require('md5');
+/**
+ * 用户注册表
+ */
+
 const userInfo = {
     name: null,
     password: null,
