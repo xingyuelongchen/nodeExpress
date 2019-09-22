@@ -6,15 +6,19 @@ module.exports = function (req, res, config) {
     }
 }
 function get(req, res, config) {
-    res.send('index - get')
+    // 用于获取当前已登录用户数据
+    res.send('user - get')
 }
 function post(req, res, config) {
-    res.send('index - post')
+    // 用于提交新注册用户数据
+    res.send('user - post')
 }
 function del(req, res, config) {
-    res.send('index - del')
+    // 用于删除用户
+    res.send('user - del')
 
 }
 function put(req, res, config) {
-    res.send('index - put')
+    // 用于更新用户信息
+    res.send('user - put')
 }

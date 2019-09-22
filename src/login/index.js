@@ -1,20 +1,24 @@
-module.exports = function (req, res, obj) {
-    if (req.method.toLowerCase() == 'get') {
-        loginGet(req, res, obj)
-        return true;
+module.exports = function (req, res, config) {
+    try {
+        ({ 'get': get, 'post': post, 'delete': del, 'put': put }[req.method.toLowerCase()])(req, res, config)
+    } catch (error) {
+        res.status(400).send('请求错误')
     }
-    if (req.method.toLowerCase() == 'post') {
-        loginPost(req, res, obj)
-        return true;
-    }
-    res.status(403).send('请求类型错误')
 }
-function loginGet(req, res, obj) {
-    // 返回登陆注册页面
-    res.status(200).send('ok')
+function get(req, res, config) {
+    // 用于获取当前已登录用户数据
+    res.send('login - get')
 }
-function loginPost(req, res, obj) {
-    // 登陆注册请求接口数据
-    res.status(200).send('ok')
+function post(req, res, config) {
+    // 用于提交新注册用户数据
+    res.send('login - post')
+}
+function del(req, res, config) {
+    // 用于删除用户
+    res.send('login - del')
 
+}
+function put(req, res, config) {
+    // 用于更新用户信息
+    res.send('login - put')
 }

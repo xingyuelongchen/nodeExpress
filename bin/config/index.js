@@ -1,5 +1,4 @@
 const path = require("path");
-
 const config = {
     root: path.resolve(__dirname, '../../'),
     rootSrc: path.resolve(__dirname, '../../src'),

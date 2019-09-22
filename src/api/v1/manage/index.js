@@ -2,19 +2,20 @@ module.exports = function (req, res, config) {
     try {
         ({ 'get': get, 'post': post, 'delete': del, 'put': put }[req.method.toLowerCase()])(req, res, config)
     } catch (error) {
-        res.status(400).send('请求错误')
+        console.log(error)
+        res.status(400).send(req.url + ' 请求错误')
     }
 }
 function get(req, res, config) {
-    res.send('index - get')
+    res.send('manage - get')
 }
 function post(req, res, config) {
-    res.send('index - post')
+    res.send('manage - post')
 }
 function del(req, res, config) {
-    res.send('index - del')
+    res.send('manage - del')
 
 }
 function put(req, res, config) {
-    res.send('index - put')
+    res.send('manage - put')
 }

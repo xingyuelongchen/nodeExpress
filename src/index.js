@@ -2,7 +2,7 @@ module.exports = function (req, res, config) {
     try {
         ({ 'get': get, 'post': post, 'delete': del, 'put': put }[req.method.toLowerCase()])(req, res, config)
     } catch (error) {
-        res.status(400).send('请求错误')
+        res.error(500, req, error)
     }
 }
 function get(req, res, config) {
