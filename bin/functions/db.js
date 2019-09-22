@@ -47,6 +47,7 @@ function find(option, fn) {
                 for (let i = 0; i < len; i++) {
                     dataArr.push(db.collection(table).find(find).sort(sort).skip(skip).limit(limit).toArray())
                 }
+
                 Promise.all(dataArr).then(e => {
                     let data = [];
                     e.forEach(e => {
@@ -60,6 +61,9 @@ function find(option, fn) {
                     });
                     fn(null, data, count);
                 })
+                    .catch(err => {
+                        console.log(err)
+                    })
             });
         });
     } else {
@@ -110,7 +114,7 @@ function del(option, fn) {
         const find = option.find || {};
         database((db) => {
             db.collection(table).deleteMany(find, false, function (err, result) {
-                fn(err, result)
+                fn(err, result.result)
             })
         })
     }

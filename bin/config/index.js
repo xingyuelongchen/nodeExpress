@@ -12,10 +12,17 @@ const config = {
         username: '',
         password: '',
         dbName: 'test',
+        table: {
+            user: 'user',
+            token: 'token',
+            uid_id: 'uid_id'
+        }
     },
-    err: {
-        404: '404 - 找不到页面',
-        500: '500 - 服务器错误'
+    error: {
+        404: `404 - 资源未找到. Server Error:`,
+        500: `500 - 处理程序未定义. Server Error:`,
+        501: `501 - Token 验证失败. Server Error:`,
+        505: `505 - 数据库出错. Server Error:`,
     }
 }
 
