@@ -22,6 +22,7 @@ const config = {
         404: `404 - 资源未找到. Server Error:`,
         500: `500 - 处理程序未定义. Server Error:`,
         501: `501 - Token 验证失败. Server Error:`,
+        502: '502 - 日志记录写入失败. Server Error',
         505: `505 - 数据库出错. Server Error:`,
     }
 }

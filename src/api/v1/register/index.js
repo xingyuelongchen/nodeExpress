@@ -60,7 +60,7 @@ function post(req, res, config) {
         res.info('账号只能是字母、数字、中文、手机号、邮箱');
         return;
     }
-    res.Api.db.find({
+    res.ApiDb.find({
         table: config.db.table.user,
         find: { name },
     }, (err, data, count) => {
@@ -75,7 +75,7 @@ function post(req, res, config) {
                 return;
             }
             userInfo.password = md5(password);
-            res.Api.db.insert(config.db.table.user, userInfo, (err, data) => {
+            res.ApiDb.insert(config.db.table.user, userInfo, (err, data) => {
                 if (err) { res.error(500); return };
                 res.succress('注册成功')
             })

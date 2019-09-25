@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const router = require('./bin/router');
 const config = require('./bin/config');
 const formidableMiddleware = require('express-formidable');

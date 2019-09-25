@@ -7,9 +7,50 @@ const md5 = require('md5');
 
 // 请求头操作
 router.use((req, res, next) => {
-    res.Api = api();
-    res.DB = db;
-    res.MD5 = md5;
+    for (let k in api) {
+        res[k] = api[k];
+    }
+    res.ApiMD5 = md5;
+    res.setlog = function (data) {
+        return this.ApiLog.setlog.bind(this)(req, data)
+    }
+    res.error = function (code) {
+        let text = config.error[code]
+        this.status(code).send({ code, message: text })
+    }
+    res.info = function (data) {
+        if (data.log) {
+            this.setlog(data.log).then(e => {
+                this.status(400).send({ code: 400, message: data })
+            }).catch(e => {
+                console.log(err);
+                console.log('Error: ', __dirname);
+                delete data.log;
+                typeof data == 'object' ? data = { ...data } : '';
+                this.status(400).send({ code: 400, message: data, log: '日志记录写入失败' })
+            });
+        } else {
+            this.status(400).send({ code: 400, message: data })
+        }
+    }
+    res.succress = function (data) {
+        if (data.log) {
+            this.setlog(data.log).then(e => {
+                typeof data == 'object' ? data = { ...data } : '';
+                this.status(200).send({ code: 200, message: 'ok', data })
+            }).catch(e => {
+                console.log(err);
+                console.error('Error: ', __dirname);
+                delete data.log;
+                typeof data == 'object' ? data = { ...data } : '';
+                this.status(200).send({ code: 200, message: '请求处理完成，日志记录写入失败', data })
+            })
+        } else {
+            typeof data == 'object' ? data = { ...data } : '';
+            this.status(200).send({ code: 200, message: 'ok', data })
+        }
+    }
+
     // 跨域设置
     res.header({
         "Access-Control-Allow-Origin": req.headers.host, // 允许跨域请求的地址
@@ -17,18 +58,8 @@ router.use((req, res, next) => {
         "Access-Control-Allow-Credentials": true,
         "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
     });
-    // 
-    res.error = function (code) {
-        let text = config.error[code]
-        this.status(code).send({ code, message: text })
-    }
-    res.info = function (data) {
-        res.status(400).send({ code: 400, message: data })
-    }
-    res.succress = function (data) {
-        typeof data == 'object' ? data = { ...data } : '';
-        this.status(200).send({ code: 200, message: 'ok', data })
-    }
+
+    // console.log(res.ApiDb)
     next();
 })
 
@@ -46,6 +77,7 @@ router.use('*', (req, res, next) => {
 
 // 挂载 模块 路由
 router.all('/*', (req, res, next) => {
+
     if (fs.existsSync(config.rootSrc + req.url) && fs.existsSync(config.rootSrc + req.url + '/index.js')) {
         require(config.rootSrc + req.url)(req, res, config)
     } else {
@@ -68,18 +100,19 @@ function token(req, res, next) {
     }
     // 验证私密请求token
     if (/(\/user|\/manage)/.test(req.url)) {
-        res.Api.db.find({
+        res.ApiDb.find({
             table: config.db.table.uid_id,
             find: { token: req.headers.uid_id }
         }, (err, data) => {
             if (!err && data.length > 0 && data[0].maxAge > Date.now()) {
                 if (data[0].maxAge < (Date.now() + 4 * 24 * 60 * 60 * 1000)) {
-                    res.Api.db.update({
+                    res.ApiDb.update({
                         table: config.db.table.uid_id,
                         find: { token: req.headers.uid_id },
                         value: { maxAge: Date.now() + 24 * 7 * 60 * 60 * 1000 }
                     })
                 }
+                res.userInfo = data.user
                 next()
             } else {
                 res.info('uid_id验证不通过')

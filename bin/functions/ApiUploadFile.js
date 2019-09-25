@@ -2,8 +2,8 @@ const md5 = require('md5');
 const FS = require('fs');
 const multiparty = require('multiparty');
 const PATH = require('path');
-const delDir = require('./delDir');
-const mkDir = require('./mkDir')
+const delDir = require('./ApiDelDir');
+const mkDir = require('./ApiMkDir')
 module.exports = a;
 
 /**
