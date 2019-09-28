@@ -23,7 +23,7 @@ function get(req, res, config) {
         find: { token }
     }, (err, d) => {
         if (!err) {
-            res.succress('退出登录')
+            res.succress({ message: '退出登录' })
         } else {
             res.error(500)
         }
@@ -40,7 +40,6 @@ function post(req, res, config) {
         table: 'user',
         find: { $or: [{ name }, { phone: name }, { email: name }] }
     }
-    console.log(res.ApiDb)
     res.ApiDb.find(find, (err, d, count) => {
         if (d.length > 0 && d[0].password == res.ApiMD5(password)) {
             let token = res.ApiMD5(res.ApiMD5(d[0].password) + res.ApiMD5(d[0]._id));

@@ -1,11 +1,12 @@
 const md5 = require('md5');
 /**
- * 用户注册表
+ * 用户注册验证表
  */
-
 const userInfo = {
     name: {
-        required: true
+        required: true,
+        type: /^[\w\d\u4e00-\u9fa5]{3,32}$/,
+        message: '账号只能是字母、数字、中文、手机号、邮箱'
     },
     password: {
         required: true,
@@ -18,27 +19,34 @@ const userInfo = {
         default: Date.now()
     },
     imgurl: null,
-    phone: null,
-    email: 'email',
-    qq: null,
+    phone: {
+        required: false,
+        type: 'phone',
+        message: '请输入正确的手机号'
+    },
+    email: {
+        type: 'email',
+        message: '请输入正确的Email地址'
+    },
+    qq: Number,
     wechat: null,
-    age: null,
+    age: Number,
     city: null,
     country: null,
     address: null,
-    uid: null,
-    sex: 0,
-    limits: Array, // 权限
+    uid: 'uid',
+    sex: {
+        type: /[123]/,
+        message: '请输入合法性别',
+        default:0
+    },
+    role: {
+        admin: Array,
+        user: Array,
+        other: Array
+    }, // 权限
 }
 
-
-module.exports = function (req, res, config) {
-    try {
-        ({ 'put': put, 'post': post }[req.method.toLowerCase()])(req, res, config)
-    } catch (error) {
-        res.error(500)
-    }
-}
 
 
 
@@ -61,20 +69,12 @@ function post(req, res, config) {
         res.info(isError.message);
         return;
     }
-    if (!(name && password)) {
-        res.info('参数传递有误')
-    }
     if (!res.ApiExp(name, 'email').error) {
         userInfo.name = name;
         userInfo.email = name;
     } else if (!res.ApiExp(name, 'phone').error) {
         userInfo.name = name;
         userInfo.phone = name;
-    } else if (/^[\w\d\u4e00-\u9fa5]{3,32}$/.test(name)) {
-        userInfo.name = name;
-    } else {
-        res.info('账号只能是字母、数字、中文、手机号、邮箱');
-        return error;
     }
     res.ApiDb.find({
         table: config.db.table.user,
@@ -88,14 +88,24 @@ function post(req, res, config) {
                 res.info('密码格式不能与用户名相同')
             } else if (res.ApiExp(password, /^[\w\d]{6,32}$/).error) {
                 res.info('密码格式不正确，只能是6-32位字母和数字')
-                return error;
+                return;
             }
             userInfo.password = md5(password);
             res.ApiDb.insert(config.db.table.user, userInfo, (err, data) => {
-                if (err) { res.error(500); return error };
+                if (err) { res.error(500); return };
                 res.succress('注册成功')
             })
         }
     })
 
+}
+
+
+
+module.exports = function (req, res, config) {
+    try {
+        ({ 'put': put, 'post': post }[req.method.toLowerCase()])(req, res, config)
+    } catch (error) {
+        res.error(500)
+    }
 }

@@ -55,6 +55,10 @@ function exp(a, b) {
                 err[k] = type[k].message || k + 'is not null'
                 continue;
             }
+            // 验证非必填字段是否填写
+            if (!type[k].required && !data[k]) {
+                continue;
+            }
 
             // 不检测类型
             if (!type[k].type) {

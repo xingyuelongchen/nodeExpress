@@ -37,8 +37,9 @@ router.use((req, res, next) => {
         if (data.log) {
             this.setlog(data.log).then(e => {
                 typeof data == 'object' ? data = { ...data } : '';
+                delete data.log;
                 this.status(200).send({ code: 200, message: 'ok', data })
-            }).catch(e => {
+            }).catch(err => {
                 console.log(err);
                 console.error('Error: ', __dirname);
                 delete data.log;
