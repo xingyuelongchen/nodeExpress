@@ -4,12 +4,22 @@ const md5 = require('md5');
  */
 
 const userInfo = {
-    name: null,
-    password: null,
-    createTime: Date.now(),
+    name: {
+        required: true
+    },
+    password: {
+        required: true,
+        type: /^[\w\d]{6,32}$/,
+        message: '密码不符合规则'
+    },
+    createTime: {
+        required: true,
+        type: Date,
+        default: Date.now()
+    },
     imgurl: null,
     phone: null,
-    email: null,
+    email: 'email',
     qq: null,
     wechat: null,
     age: null,
@@ -18,7 +28,7 @@ const userInfo = {
     address: null,
     uid: null,
     sex: 0,
-    limits: 0, // 权限
+    limits: Array, // 权限
 }
 
 
@@ -45,20 +55,26 @@ function put(req, res, config) {
 // 用户注册
 function post(req, res, config) {
     let { name, password } = req.body;
+
+    let isError = res.ApiExp({ name, password }, userInfo)
+    if (isError.error) {
+        res.info(isError.message);
+        return;
+    }
     if (!(name && password)) {
         res.info('参数传递有误')
     }
-    if (/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(name)) {
+    if (!res.ApiExp(name, 'email').error) {
         userInfo.name = name;
         userInfo.email = name;
-    } else if (/^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-7|9])|(?:5[0-3|5-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1|8|9]))\d{8}$/.test(name)) {
+    } else if (!res.ApiExp(name, 'phone').error) {
         userInfo.name = name;
         userInfo.phone = name;
     } else if (/^[\w\d\u4e00-\u9fa5]{3,32}$/.test(name)) {
         userInfo.name = name;
     } else {
         res.info('账号只能是字母、数字、中文、手机号、邮箱');
-        return;
+        return error;
     }
     res.ApiDb.find({
         table: config.db.table.user,
@@ -70,13 +86,13 @@ function post(req, res, config) {
             // 验证密码
             if (name === password) {
                 res.info('密码格式不能与用户名相同')
-            } else if (!/^[\w\d]{6,32}$/.test(password)) {
+            } else if (res.ApiExp(password, /^[\w\d]{6,32}$/).error) {
                 res.info('密码格式不正确，只能是6-32位字母和数字')
-                return;
+                return error;
             }
             userInfo.password = md5(password);
             res.ApiDb.insert(config.db.table.user, userInfo, (err, data) => {
-                if (err) { res.error(500); return };
+                if (err) { res.error(500); return error };
                 res.succress('注册成功')
             })
         }

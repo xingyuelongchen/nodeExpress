@@ -92,7 +92,6 @@ router.all('*', (req, res) => {
 
 module.exports = router;
 function token(req, res, next) {
-
     // 验证公共请求token
     if (req.headers.token !== 'token') {
         res.error(501);
