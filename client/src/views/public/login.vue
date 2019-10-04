@@ -26,12 +26,9 @@ export default {
     methods: {
         onSubmit() {
             this.$http({
-                url: "http://127.0.0.1:3000/api/v1/public/login",
+                url: "public/login",
                 method: "post",
-                data: this.form,
-                headers: {
-                    token: "token"
-                }
+                data: this.form
             })
                 .then(e => {
                     console.log("a", e);

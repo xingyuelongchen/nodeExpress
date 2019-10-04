@@ -11,6 +11,7 @@ Vue.config.productionTip = false;
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
   console.log(config)
+  config.headers['token'] = 'token';
   // 在发送请求之前做些什么
   return config;
 }, function (error) {
@@ -26,7 +27,8 @@ axios.interceptors.response.use(function (response) {
   // 对响应错误做点什么
   return Promise.reject(error);
 });
-axios.defaults.baseURL = "http://127.0.0.1:3000/api/v1/"
+axios.defaults.baseURL = "http://192.168.1.101:3000/api/v1/"
+axios.defaults.withCredentials = true;
 Vue.prototype.$http = axios;
 new Vue({
   router,

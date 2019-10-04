@@ -18,4 +18,5 @@ app.use('/favicon.ico', function () {
     return
 })
 app.use(express.static('src'));
+// app.use(cors({ credentials: true, origin: true }));
 app.use(router)

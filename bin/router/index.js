@@ -11,7 +11,7 @@ router.use((req, res, next) => {
 
     // 跨域设置
     res.header({
-        "Access-Control-Allow-Origin": '*', // 允许跨域请求的地址
+        "Access-Control-Allow-Origin": req.headers.origin, // 允许跨域请求的地址
         "Access-Control-Allow-Method": "GET,POST,PUT,DELETE,OPTIONS",
         "Access-Control-Allow-Credentials": true,
         "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept,token",
@@ -19,7 +19,8 @@ router.use((req, res, next) => {
     });
     // 预检请求返回
     if (req.method.toLowerCase() == 'options') {
-        res.send(200)
+        res.send(200);
+        return;
     }
     for (let k in api) {
         res[k] = api[k];
