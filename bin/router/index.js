@@ -35,12 +35,14 @@ router.use((req, res, next) => {
     res.info = function (data) {
         if (data.log) {
             this.setlog(data.log).then(e => {
+                typeof data == 'object' ? data = { ...data } : '';
+                delete data.log;
                 this.status(400).send({ code: 400, message: data })
             }).catch(e => {
                 console.log(err);
                 console.log('Error: ', __dirname);
-                delete data.log;
                 typeof data == 'object' ? data = { ...data } : '';
+                delete data.log;
                 this.status(400).send({ code: 400, message: data, log: '日志记录写入失败' })
             });
         } else {
