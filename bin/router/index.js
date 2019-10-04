@@ -7,6 +7,20 @@ const md5 = require('md5');
 
 // 请求头操作
 router.use((req, res, next) => {
+
+
+    // 跨域设置
+    res.header({
+        "Access-Control-Allow-Origin": '*', // 允许跨域请求的地址
+        "Access-Control-Allow-Method": "GET,POST,PUT,DELETE,OPTIONS",
+        "Access-Control-Allow-Credentials": true,
+        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept,token",
+        "Access-Control-Max-Age": '10000'
+    });
+    // 预检请求返回
+    if (req.method.toLowerCase() == 'options') {
+        res.send(200)
+    }
     for (let k in api) {
         res[k] = api[k];
     }
@@ -51,16 +65,6 @@ router.use((req, res, next) => {
             this.status(200).send({ code: 200, message: 'ok', data })
         }
     }
-
-    // 跨域设置
-    res.header({
-        "Access-Control-Allow-Origin": req.headers.host, // 允许跨域请求的地址
-        "Access-Control-Allow-Method": "GET,POST,PUT,DELETE",
-        "Access-Control-Allow-Credentials": true,
-        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
-    });
-
-    // console.log(res.ApiDb)
     next();
 })
 
@@ -95,6 +99,7 @@ module.exports = router;
 function token(req, res, next) {
     // 验证公共请求token
     if (req.headers.token !== 'token') {
+        console.log('******************')
         res.error(501);
         return;
     }

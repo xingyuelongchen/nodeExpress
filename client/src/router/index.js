@@ -18,6 +18,10 @@ export default new Router({
         ...publics
       ]
     },
+    {
+      path: '/login',
+      component: () => import("@/views/public/login.vue")
+    },
     //后台管理路由
     {
       path: '/admin',
