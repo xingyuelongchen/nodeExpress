@@ -15,7 +15,8 @@ const config = {
         table: {
             user: 'user',
             token: 'token',
-            uid_id: 'uid_id'
+            uid_id: 'uid_id',
+            token:'token'
         }
     },
     error: {

@@ -12,7 +12,6 @@ app.listen(config.server.port, config.server.domain, () => {
 // app.use(bodyParser.json({ type: 'text/plain' }));
 // app.use(bodyParser.json({ type: 'application/json' }));
 // app.use(bodyParser.json());
-
 app.use(formidableMiddleware());//formdata解析模块
 app.use('/favicon.ico', function () {
     return

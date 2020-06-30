@@ -6,6 +6,8 @@ module.exports = {
     getlog
 }
 function setlog(req, data) {
+    console.log(data);
+    
     data = {
         createTime: Date.now(),
         content: data,

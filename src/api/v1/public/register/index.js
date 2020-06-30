@@ -5,7 +5,7 @@ const md5 = require('md5');
 const userInfo = {
     name: {
         required: true,
-        type: /^[\w\d\u4e00-\u9fa5]{3,32}$/,
+        type: /^[\w\d@\.\u4e00-\u9fa5]{3,32}$/,
         message: '账号只能是字母、数字、中文、手机号、邮箱'
     },
     password: {
@@ -38,13 +38,9 @@ const userInfo = {
     sex: {
         type: /[123]/,
         message: '请输入合法性别',
-        default:0
+        default: 0
     },
-    role: {
-        admin: Array,
-        user: Array,
-        other: Array
-    }, // 权限
+    role: null
 }
 
 
@@ -63,35 +59,37 @@ function put(req, res, config) {
 // 用户注册
 function post(req, res, config) {
     let { name, password } = req.body;
-
-    let isError = res.ApiExp({ name, password }, userInfo)
+    let isError = res.ApiExp({ name, password }, userInfo);
     if (isError.error) {
         res.info(isError.message);
         return;
     }
+    let user = isError.data;
     if (!res.ApiExp(name, 'email').error) {
-        userInfo.name = name;
-        userInfo.email = name;
+        user.name = name;
+        user.email = name;
     } else if (!res.ApiExp(name, 'phone').error) {
-        userInfo.name = name;
-        userInfo.phone = name;
+        user.name = name;
+        user.phone = name;
+    } else if (name === password) {
+        res.info('密码不能与用户名相似或相同');
+        return;
     }
     res.ApiDb.find({
         table: config.db.table.user,
         find: { name },
     }, (err, data, count) => {
-        if (data.length > 1) {
+        if (data.length > 0) {
             res.info('该账号已存在，请重新输入')
         } else {
             // 验证密码
-            if (name === password) {
-                res.info('密码格式不能与用户名相同')
-            } else if (res.ApiExp(password, /^[\w\d]{6,32}$/).error) {
+            if (res.ApiExp(password, /^[\w\d]{6,32}$/).error) {
                 res.info('密码格式不正确，只能是6-32位字母和数字')
                 return;
             }
-            userInfo.password = md5(password);
-            res.ApiDb.insert(config.db.table.user, userInfo, (err, data) => {
+            user.password = md5(password);
+            user.uid_id = md5(new Date() + user.name);
+            res.ApiDb.insert(config.db.table.user, user, (err, data) => {
                 if (err) { res.error(500); return };
                 res.succress('注册成功')
             })

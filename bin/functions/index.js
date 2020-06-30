@@ -5,7 +5,7 @@ const path = require('path');
 /**
  * 返回方法对象，包含所有公共接口
  */
-module.exports = api()
+module.exports = api();
 function api() {
     let root = config.root + '/bin/functions'
     let arr = {}

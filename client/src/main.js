@@ -27,7 +27,7 @@ axios.interceptors.response.use(function (response) {
   // 对响应错误做点什么
   return Promise.reject(error);
 });
-axios.defaults.baseURL = "http://192.168.1.101:3000/api/v1/"
+axios.defaults.baseURL = "http://127.0.0.1:3000/api/v1/"
 axios.defaults.withCredentials = true;
 Vue.prototype.$http = axios;
 new Vue({
